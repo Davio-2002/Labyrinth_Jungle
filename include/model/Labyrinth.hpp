@@ -2,21 +2,20 @@
 #define LABYRINTH_HPP
 
 #include <vector>
-#include <optional>
 #include "Cell.hpp"
 
 class Labyrinth final {
 public:
     explicit Labyrinth();
 
-    void generateLabyrinth();
+    void labyrinthGenerationLogic();
 
-    std::optional<std::pair<int, int>> findExit();
-
-    // TODO: լիքը բան կա հլը ստե անելու
+    bool isMoveValid();
 
 private:
-    std::vector<std::vector<Cell> > labyrinth{};
+    using LabyrinthVector = std::vector<std::vector<Cell>>;
+
+    LabyrinthVector labyrinth{};
     int height{};
     int width{};
 };

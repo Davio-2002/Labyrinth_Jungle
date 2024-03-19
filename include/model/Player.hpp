@@ -1,17 +1,15 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-class Player {
-public:
-    virtual ~Player() = default;
+#include "utils/Directions.hpp"
 
-    virtual void move(int dx, int dy) = 0;
+class IPlayer {
+public:
+    virtual ~IPlayer() = default;
+
+    virtual void move(Direction) = 0;
 
     virtual void cutTree() = 0;
-
-protected:
-    int posX{};
-    int posY{};
 };
 
 #endif
