@@ -31,6 +31,7 @@ set(UTILS_SOURCES
         include/view/GameView.hpp
         include/model/Cell.hpp
         src/model/Cell.cpp
+        include/utils/Directions.hpp
 )
 
 add_executable(Labyrinth_Jungle_2024
