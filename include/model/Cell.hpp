@@ -2,10 +2,10 @@
 #define CELL_HPP
 
 enum class CellType {
-    EMPTY = 0,
-    TREE = 1,
-    PLANTED = 2,
-    EXIT = 3
+    EMPTY,
+    TREE,
+    PLANTED,
+    EXIT
 };
 
 struct Cell final {
