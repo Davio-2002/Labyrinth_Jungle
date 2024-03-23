@@ -4,6 +4,7 @@
 #include "model/HumanPlayer.hpp"
 
 int main() {
+    std::cout << "test commit..";
     auto game = std::make_shared<HumanPlayer>();
     const auto render = std::make_shared<GameView>(game);
 
