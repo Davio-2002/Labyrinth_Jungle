@@ -1,31 +1,67 @@
-#include "view/GameView.hpp"
+#include "GameView.hpp"
 
-GameView::GameView(const std::shared_ptr<HumanPlayer> &player) {
-    human_ = player;
+GameView::GameView(const size_t dim) {
+    labyrinth_ = std::make_shared<Labyrinth>(dim);
+    human_ = std::make_shared<HumanPlayer>();
     init();
 }
 
-// #TODO -> Refactor function for labbyrinth business logic
 void GameView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    states.transform *= getTransform();
-    const auto color = sf::Color(200, 100, 200);
+    renderLabyrinth(target);
+}
 
-    sf::RectangleShape shape(sf::Vector2f(100, 100));
-    shape.setOutlineThickness(2.f);
-    shape.setOutlineColor(color);
-    shape.setFillColor(sf::Color::Transparent);
-    target.draw(shape, states);
+void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
+    sf::RectangleShape cellRect(sf::Vector2f(CELLSIZE, CELLSIZE));
+    cellRect.setPosition(static_cast<float>(cell.getX()) * CELLSIZE, static_cast<float>(cell.getY()) * CELLSIZE);
+    cellRect.setOutlineColor(sf::Color::Black);
+    cellRect.setOutlineThickness(THICKNESS);
+
+    switch (cell.getState()) {
+        case CellState::TREE:
+            cellRect.setFillColor(sf::Color(47, 117, 0));
+            break;
+        case CellState::BORDER:
+            cellRect.setFillColor(sf::Color(92, 73, 40));
+            break;
+        case CellState::PLANTED:
+            cellRect.setFillColor(sf::Color::Magenta);
+            break;
+        case CellState::EXIT:
+            cellRect.setFillColor(sf::Color(136, 156, 54));
+            break;
+        default:
+            cellRect.setFillColor(sf::Color(136, 156, 54));
+    }
+
+    target.draw(cellRect);
+}
+
+void GameView::renderLabyrinth(sf::RenderTarget &target) const {
+    const auto &lab = labyrinth_->getLabyrinth(); // Use a reference to avoid unnecessary copies
+    for (const auto &row: lab) {
+        for (const auto &cell: row) {
+            renderCell(target, cell);
+        }
+    }
 }
 
 void GameView::init() {
-    setPosition(50.f, 50.f);
-    window_.create(sf::VideoMode(800, 600), "Welcome to the Jungle");
-    window_.setFramerateLimit(60);
+    labyrinth_->generateViaDFS();
+    labyrinth_->setRandomExit();
 
+    size_t dim = labyrinth_->getDim();
+    window_.create(sf::VideoMode(static_cast<unsigned int>(CELLSIZE) * (2 * dim + 1),
+                                 static_cast<unsigned int>(CELLSIZE) * (2 * dim + 1)), "Labyrinth");
+    window_.setFramerateLimit(60);
 }
 
 void GameView::render() {
     window_.clear();
-    window_.draw(*this);
+    window_.draw(*this); // Draw the game view
     window_.display();
 }
+
+void GameView::animateGeneration() {
+
+}
+

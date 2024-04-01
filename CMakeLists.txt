@@ -1,11 +1,10 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.27)
 
 project(Labyrinth_Jungle_2024)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Including the header files here
-include_directories(include)
+include_directories(include/controller include/model include/view include/utils)
 
 set(MODEL_SOURCES
         src/model/Labyrinth.cpp
@@ -30,8 +29,6 @@ set(UTILS_SOURCES
         include/utils/PathFinding.hpp
         include/view/GameView.hpp
         include/model/Cell.hpp
-        src/model/Cell.cpp
-        include/utils/Directions.hpp
 )
 
 add_executable(Labyrinth_Jungle_2024
