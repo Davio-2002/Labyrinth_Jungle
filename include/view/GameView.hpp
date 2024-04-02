@@ -10,7 +10,7 @@
 #include "Labyrinth.hpp"
 
 namespace {
-    constexpr float CELLSIZE = 12.0f;
+    constexpr float CELLSIZE = 10.0f;
     constexpr float THICKNESS = 1.0f;
 }
 
@@ -20,23 +20,29 @@ public:
 
     sf::RenderWindow &window() { return window_; }
 
-    // TODO -> remove this in the end, this is just a test method to ensure something is being drawn
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
-    // TODO -> add Node (Cell) list as an argument
     void renderCell(sf::RenderTarget &target, const Cell &cell) const;
+
+    void renderPlayer(sf::RenderTarget &target, const HumanPlayer &human) const;
 
     void renderLabyrinth(sf::RenderTarget &target) const;
 
-    // TODO -> adjust step by step animation
-    void animateGeneration();
+    void resetGame() const;
 
     void init();
 
     void render();
 
-private:
+    const std::shared_ptr<HumanPlayer>& getHuman() const {
+        return human_;
+    }
 
+    const std::shared_ptr<Labyrinth>& getLabyrinth() const {
+        return labyrinth_;
+    }
+
+private:
     std::shared_ptr<Labyrinth> labyrinth_{};
     std::shared_ptr<HumanPlayer> human_{};
     sf::RenderWindow window_;

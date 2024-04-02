@@ -2,19 +2,17 @@
 #define LABYRINTH_HPP
 
 #include <array>
-#include <vector>
-#include <stack>
 #include <random>
+#include <stack>
+#include <vector>
 
 #include "Cell.hpp"
 
-namespace {
-    using LabyrinthVector = std::vector<std::vector<Cell> >;
-    using UnvisitedNeighbourVector = std::vector<std::pair<size_t, size_t>>;
-}
-
 class Labyrinth final {
 public:
+    using CellMatrix = std::vector<std::vector<Cell>>;
+    using UnvisitedNeighbours = std::vector<std::pair<size_t, size_t>>;
+
     explicit Labyrinth(size_t dim);
 
     void generateViaDFS();
@@ -25,18 +23,22 @@ public:
         return dim;
     }
 
-    LabyrinthVector getLabyrinth() const {
+    CellMatrix getLabyrinth() const {
         return labyrinth;
+    }
+
+    size_t getMatrixSize() const {
+        return matrixSize;
     }
 
 private:
     static constexpr size_t DIRCOUNT = 4;
-    LabyrinthVector labyrinth{};
+    CellMatrix labyrinth{};
     std::vector<std::pair<int, int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
     size_t dim{};
     size_t matrixSize{};
 
-    UnvisitedNeighbourVector getUnvisitedNeighbours(const size_t& curr_x, const size_t& curr_y);
+    UnvisitedNeighbours getUnvisitedNeighbours(const size_t &curr_x, const size_t &curr_y);
 
     void carvePathBetweenTrees(const size_t &curr_x, const size_t &curr_y, const size_t next_x, const size_t next_y);
 

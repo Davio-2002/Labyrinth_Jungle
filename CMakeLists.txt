@@ -8,7 +8,6 @@ include_directories(include/controller include/model include/view include/utils)
 
 set(MODEL_SOURCES
         src/model/Labyrinth.cpp
-        src/model/Player.cpp
         src/model/HumanPlayer.cpp
 )
 

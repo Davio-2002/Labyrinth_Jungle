@@ -8,6 +8,7 @@ GameView::GameView(const size_t dim) {
 
 void GameView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     renderLabyrinth(target);
+    renderPlayer(target, *human_);
 }
 
 void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
@@ -37,7 +38,7 @@ void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
 }
 
 void GameView::renderLabyrinth(sf::RenderTarget &target) const {
-    const auto &lab = labyrinth_->getLabyrinth(); // Use a reference to avoid unnecessary copies
+    const auto &lab = labyrinth_->getLabyrinth();// Use a reference to avoid unnecessary copies
     for (const auto &row: lab) {
         for (const auto &cell: row) {
             renderCell(target, cell);
@@ -51,17 +52,26 @@ void GameView::init() {
 
     size_t dim = labyrinth_->getDim();
     window_.create(sf::VideoMode(static_cast<unsigned int>(CELLSIZE) * (2 * dim + 1),
-                                 static_cast<unsigned int>(CELLSIZE) * (2 * dim + 1)), "Labyrinth");
+                                 static_cast<unsigned int>(CELLSIZE) * (2 * dim + 1)),
+                   "Labyrinth");
     window_.setFramerateLimit(60);
 }
 
 void GameView::render() {
     window_.clear();
-    window_.draw(*this); // Draw the game view
+    window_.draw(*this);
     window_.display();
 }
 
-void GameView::animateGeneration() {
-
+void GameView::renderPlayer(sf::RenderTarget &target, const HumanPlayer &human) const {
+    sf::RectangleShape playerShape(sf::Vector2f(CELLSIZE - THICKNESS, CELLSIZE - THICKNESS));
+    playerShape.setOutlineColor(sf::Color::Black);
+    playerShape.setOutlineThickness(THICKNESS);
+    playerShape.setFillColor(sf::Color(232, 188, 14));
+    playerShape.setPosition(human.getX() * CELLSIZE, human.getY() * CELLSIZE);
+    target.draw(playerShape);
 }
 
+void GameView::resetGame() const {
+
+}

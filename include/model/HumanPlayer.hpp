@@ -5,17 +5,14 @@
 
 class HumanPlayer final : public IPlayer {
 public:
-    explicit HumanPlayer() : IPlayer() {
-        posX = 0;
-        posY = 0;
-    }
+    explicit HumanPlayer() : posX{1}, posY{1} {}
 
-    void move(Direction directions) override;
+    void move(size_t dx, size_t dy, Labyrinth& labyrinth) override;
 
     void cutTree() override;
 
-    int getX() const { return posX; }
-    int getY() const { return posY; }
+    float getX() const { return posX; }
+    float getY() const { return posY; }
 
 private:
     int posX{};

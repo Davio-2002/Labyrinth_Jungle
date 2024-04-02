@@ -5,7 +5,7 @@
 
 Labyrinth::Labyrinth(const size_t dim_) : dim{dim_} {
     matrixSize = 2 * dim + 1;
-    labyrinth = LabyrinthVector(matrixSize, std::vector<Cell>(matrixSize));
+    labyrinth = CellMatrix(matrixSize, std::vector<Cell>(matrixSize));
     for (size_t y = 0; y < matrixSize; ++y) {
         for (size_t x = 0; x < matrixSize; ++x) {
             labyrinth[y][x] = Cell(x, y);
@@ -30,17 +30,16 @@ void Labyrinth::setRandomExit() {
     size_t rand_y = matrixSize - 1;
     if (labyrinth[rand_y - 1][rand_x].getState() == CellState::TREE) {
         labyrinth[rand_y - 1][rand_x].setState(CellState::PATH);
-        std::cout << "Changed ";
     }
     labyrinth[rand_y][rand_x].setState(CellState::EXIT);
 }
 
-UnvisitedNeighbourVector Labyrinth::getUnvisitedNeighbours(const size_t &curr_x, const size_t &curr_y) {
-    UnvisitedNeighbourVector unvisitedNeighbors;
+Labyrinth::UnvisitedNeighbours Labyrinth::getUnvisitedNeighbours(const size_t &curr_x, const size_t &curr_y) {
+    UnvisitedNeighbours unvisitedNeighbors;
 
     for (const auto &dir: directions) {
-        int new_x = curr_x + 2 * dir.first;
-        int new_y = curr_y + 2 * dir.second;
+        auto new_x = curr_x + 2 * dir.first;
+        auto new_y = curr_y + 2 * dir.second;
 
         if (new_x > 0 && new_x < matrixSize - 1 && new_y > 0 && new_y < matrixSize - 1 &&
             !labyrinth[new_y][new_x].isVisited()) {
