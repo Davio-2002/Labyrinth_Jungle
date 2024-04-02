@@ -1,7 +1,7 @@
 #include "GameView.hpp"
 
-GameView::GameView(const size_t labSize) {
-    labyrinth_ = std::make_shared<Labyrinth>(labSize);
+GameView::GameView(const size_t rooms) {
+    labyrinth_ = std::make_shared<Labyrinth>(rooms);
     human_ = std::make_shared<HumanPlayer>();
     init();
 }

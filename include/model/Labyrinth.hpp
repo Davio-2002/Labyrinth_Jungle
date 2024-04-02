@@ -28,7 +28,7 @@ public:
 
     bool isExitReached(HumanPlayer &human);
 
-    size_t getDim() const {
+    size_t getRooms() const {
         return rooms;
     }
 
