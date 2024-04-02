@@ -1,23 +1,48 @@
 #ifndef LABYRINTH_HPP
 #define LABYRINTH_HPP
 
+#include <array>
+#include <random>
+#include <stack>
 #include <vector>
+
 #include "Cell.hpp"
 
 class Labyrinth final {
 public:
-    explicit Labyrinth();
+    using CellMatrix = std::vector<std::vector<Cell>>;
+    using UnvisitedNeighbours = std::vector<std::pair<size_t, size_t>>;
 
-    void labyrinthGenerationLogic();
+    explicit Labyrinth(size_t dim);
 
-    bool isMoveValid();
+    void generateViaDFS();
+
+    void setRandomExit();
+
+    size_t getDim() const {
+        return dim;
+    }
+
+    CellMatrix getLabyrinth() const {
+        return labyrinth;
+    }
+
+    size_t getMatrixSize() const {
+        return matrixSize;
+    }
 
 private:
-    using LabyrinthVector = std::vector<std::vector<Cell>>;
+    static constexpr size_t DIRCOUNT = 4;
+    CellMatrix labyrinth{};
+    std::vector<std::pair<int, int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    size_t dim{};
+    size_t matrixSize{};
 
-    LabyrinthVector labyrinth{};
-    int height{};
-    int width{};
+    UnvisitedNeighbours getUnvisitedNeighbours(const size_t &curr_x, const size_t &curr_y);
+
+    void carvePathBetweenTrees(const size_t &curr_x, const size_t &curr_y, const size_t next_x, const size_t next_y);
+
+    size_t generateRandom(size_t start, size_t dest);
 };
 
 #endif

@@ -1,15 +1,15 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "utils/Directions.hpp"
+#include "Labyrinth.hpp"
 
 class IPlayer {
 public:
-    virtual ~IPlayer() = default;
-
-    virtual void move(Direction) = 0;
+    virtual void move(size_t, size_t, Labyrinth& labyrinth) = 0;
 
     virtual void cutTree() = 0;
+
+    virtual ~IPlayer() = default;
 };
 
 #endif
