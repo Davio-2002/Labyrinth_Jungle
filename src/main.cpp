@@ -4,7 +4,7 @@
 
 int main() {
 
-    const GameController controller;
+    GameController controller;
     controller.handleEvents();
 
     return 0;

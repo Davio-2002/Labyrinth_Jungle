@@ -3,12 +3,29 @@
 #include <algorithm>
 #include <iostream>
 
-Labyrinth::Labyrinth(const size_t dim_) : dim{dim_} {
-    initializeBoard();
+Labyrinth::Labyrinth(const size_t labSize_) : matrixSize{labSize_}, directions{{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}} {
+    if (labSize_ % 2 == 0) matrixSize += 1;
+    rooms = (matrixSize - 1) / 2;
+
+    setBoardToDefaults();
 }
 
-void Labyrinth::initializeBoard() {
-    matrixSize = 2 * dim + 1;
+bool Labyrinth::isExitReached(HumanPlayer &human) {
+    return labyrinth[human.getY()][human.getX()].getState() == CellState::EXIT;
+}
+
+bool Labyrinth::canMove(int posX, int posY, int dx, int dy) const {
+    int newX = posX + dx;
+    int newY = posY + dy;
+
+    const Cell &destinationCell = labyrinth[newY][newX];
+    CellState state = destinationCell.getState();
+
+    return state != CellState::TREE && state != CellState::BORDER;
+}
+
+
+void Labyrinth::setBoardToDefaults() {
     labyrinth = CellMatrix(matrixSize, std::vector<Cell>(matrixSize));
     for (size_t y = 0; y < matrixSize; ++y) {
         for (size_t x = 0; x < matrixSize; ++x) {
@@ -93,6 +110,3 @@ void Labyrinth::generateViaDFS() {
     }
 }
 
-void Labyrinth::resetLabyrinth() {
-
-}

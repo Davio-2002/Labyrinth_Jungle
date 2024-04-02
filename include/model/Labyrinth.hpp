@@ -7,24 +7,29 @@
 #include <vector>
 
 #include "Cell.hpp"
+#include "HumanPlayer.hpp"
+#include "IMoveValidator.hpp"
 
-class Labyrinth final {
+class Labyrinth final : public IMoveValidator {
 public:
     using CellMatrix = std::vector<std::vector<Cell>>;
     using UnvisitedNeighbours = std::vector<std::pair<size_t, size_t>>;
+    using DirectionsPairs = std::vector<std::pair<int, int>>;
 
-    explicit Labyrinth(size_t dim);
+    bool canMove(int posX, int posY, int dx, int dy) const override;
+
+    explicit Labyrinth(size_t rooms_);
 
     void generateViaDFS();
 
     void setRandomExit();
 
-    void resetLabyrinth();
+    void setBoardToDefaults();
 
-    void initializeBoard();
+    bool isExitReached(HumanPlayer &human);
 
     size_t getDim() const {
-        return dim;
+        return rooms;
     }
 
     CellMatrix getLabyrinth() const {
@@ -36,10 +41,9 @@ public:
     }
 
 private:
-    static constexpr size_t DIRCOUNT = 4;
     CellMatrix labyrinth{};
-    std::vector<std::pair<int, int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-    size_t dim{};
+    DirectionsPairs directions;
+    size_t rooms{};
     size_t matrixSize{};
 
     UnvisitedNeighbours getUnvisitedNeighbours(const size_t &curr_x, const size_t &curr_y);

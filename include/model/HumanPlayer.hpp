@@ -3,13 +3,13 @@
 
 #include "Player.hpp"
 
-class HumanPlayer final : public IPlayer {
+class HumanPlayer : public IPlayer {
 public:
     explicit HumanPlayer();
 
     void initPlayerPos();
 
-    void move(size_t dx, size_t dy, Labyrinth& labyrinth) override;
+    void move(int dx, int dy, IMoveValidator&) override;
 
     void cutTree() override;
 
