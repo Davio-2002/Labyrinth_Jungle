@@ -14,8 +14,6 @@ void GameView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
     sf::RectangleShape cellRect(sf::Vector2f(CELLSIZE, CELLSIZE));
     cellRect.setPosition(static_cast<float>(cell.getX()) * CELLSIZE, static_cast<float>(cell.getY()) * CELLSIZE);
-    cellRect.setOutlineColor(sf::Color::Black);
-    cellRect.setOutlineThickness(THICKNESS);
 
     switch (cell.getState()) {
         case CellState::TREE:
@@ -37,6 +35,15 @@ void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
     target.draw(cellRect);
 }
 
+void GameView::renderPlayer(sf::RenderTarget &target, const HumanPlayer &human) const {
+    sf::RectangleShape playerShape(sf::Vector2f(CELLSIZE - THICKNESS, CELLSIZE - THICKNESS));
+    playerShape.setOutlineColor(sf::Color::Black);
+    playerShape.setOutlineThickness(THICKNESS);
+    playerShape.setFillColor(sf::Color(232, 188, 14));
+    playerShape.setPosition(human.getX() * CELLSIZE, human.getY() * CELLSIZE);
+    target.draw(playerShape);
+}
+
 void GameView::renderLabyrinth(sf::RenderTarget &target) const {
     const auto &lab = labyrinth_->getLabyrinth();// Use a reference to avoid unnecessary copies
     for (const auto &row: lab) {
@@ -47,12 +54,10 @@ void GameView::renderLabyrinth(sf::RenderTarget &target) const {
 }
 
 void GameView::init() {
-    labyrinth_->generateViaDFS();
-    labyrinth_->setRandomExit();
-
-    size_t dim = labyrinth_->getDim();
-    window_.create(sf::VideoMode(static_cast<unsigned int>(CELLSIZE) * (2 * dim + 1),
-                                 static_cast<unsigned int>(CELLSIZE) * (2 * dim + 1)),
+    resetGenerationLogic();
+    size_t matrixSize = labyrinth_->getMatrixSize();
+    window_.create(sf::VideoMode((CELLSIZE) * (matrixSize),
+                                 (CELLSIZE) * (matrixSize)),
                    "Labyrinth");
     window_.setFramerateLimit(60);
 }
@@ -63,15 +68,14 @@ void GameView::render() {
     window_.display();
 }
 
-void GameView::renderPlayer(sf::RenderTarget &target, const HumanPlayer &human) const {
-    sf::RectangleShape playerShape(sf::Vector2f(CELLSIZE - THICKNESS, CELLSIZE - THICKNESS));
-    playerShape.setOutlineColor(sf::Color::Black);
-    playerShape.setOutlineThickness(THICKNESS);
-    playerShape.setFillColor(sf::Color(232, 188, 14));
-    playerShape.setPosition(human.getX() * CELLSIZE, human.getY() * CELLSIZE);
-    target.draw(playerShape);
+void GameView::resetGenerationLogic() {
+    labyrinth_->generateViaDFS();
+    labyrinth_->setRandomExit();
 }
 
-void GameView::resetGame() const {
-
+void GameView::resetBoard()  {
+    labyrinth_->initializeBoard();
+    human_->initPlayerPos();
+    resetGenerationLogic();
+    render();
 }

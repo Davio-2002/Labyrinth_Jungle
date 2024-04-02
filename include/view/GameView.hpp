@@ -14,7 +14,7 @@ namespace {
     constexpr float THICKNESS = 1.0f;
 }
 
-class GameView final : public sf::Drawable, public sf::Transformable {
+class GameView final : public sf::Drawable{
 public:
     explicit GameView(size_t dim);
 
@@ -28,17 +28,19 @@ public:
 
     void renderLabyrinth(sf::RenderTarget &target) const;
 
-    void resetGame() const;
-
     void init();
 
     void render();
 
-    const std::shared_ptr<HumanPlayer>& getHuman() const {
+    void resetGenerationLogic();
+
+    void resetBoard();
+
+    const std::shared_ptr<HumanPlayer>& getHumanPtr() const {
         return human_;
     }
 
-    const std::shared_ptr<Labyrinth>& getLabyrinth() const {
+    const std::shared_ptr<Labyrinth>& getLabyrinthPtr() const {
         return labyrinth_;
     }
 
