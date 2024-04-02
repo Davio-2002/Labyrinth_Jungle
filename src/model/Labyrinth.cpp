@@ -4,6 +4,10 @@
 #include <iostream>
 
 Labyrinth::Labyrinth(const size_t dim_) : dim{dim_} {
+    initializeBoard();
+}
+
+void Labyrinth::initializeBoard() {
     matrixSize = 2 * dim + 1;
     labyrinth = CellMatrix(matrixSize, std::vector<Cell>(matrixSize));
     for (size_t y = 0; y < matrixSize; ++y) {
@@ -87,4 +91,8 @@ void Labyrinth::generateViaDFS() {
             cellStack.emplace(next_x, next_y);
         }
     }
+}
+
+void Labyrinth::resetLabyrinth() {
+
 }

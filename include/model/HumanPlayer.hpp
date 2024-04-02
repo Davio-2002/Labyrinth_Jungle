@@ -5,7 +5,9 @@
 
 class HumanPlayer final : public IPlayer {
 public:
-    explicit HumanPlayer() : posX{1}, posY{1} {}
+    explicit HumanPlayer();
+
+    void initPlayerPos();
 
     void move(size_t dx, size_t dy, Labyrinth& labyrinth) override;
 

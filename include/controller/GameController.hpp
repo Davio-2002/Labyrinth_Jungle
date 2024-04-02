@@ -3,6 +3,11 @@
 
 #include "GameView.hpp"
 
+enum class GameState {
+    PLAYING,
+    RESTART
+};
+
 struct Mode final {
     void treeoCalypseMode();
 
@@ -15,9 +20,12 @@ public:
 
     void handleEvents() const;
 
+    void resetGameOnExit() const;
+
+    GameState setToFinished() const;
+
 private:
-    std::shared_ptr<Labyrinth> labyrinth_{};
-    std::shared_ptr<HumanPlayer> player_{};
+    mutable GameState playState;
     std::shared_ptr<GameView> view_{};
 };
 

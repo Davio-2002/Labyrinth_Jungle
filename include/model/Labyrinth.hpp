@@ -19,6 +19,10 @@ public:
 
     void setRandomExit();
 
+    void resetLabyrinth();
+
+    void initializeBoard();
+
     size_t getDim() const {
         return dim;
     }
