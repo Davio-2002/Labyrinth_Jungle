@@ -1,7 +1,7 @@
 #include "GameView.hpp"
 
-GameView::GameView(const size_t dim) {
-    labyrinth_ = std::make_shared<Labyrinth>(dim);
+GameView::GameView(const size_t rooms) {
+    labyrinth_ = std::make_shared<Labyrinth>(rooms);
     human_ = std::make_shared<HumanPlayer>();
     init();
 }
@@ -74,7 +74,7 @@ void GameView::resetGenerationLogic() {
 }
 
 void GameView::resetBoard()  {
-    labyrinth_->initializeBoard();
+    labyrinth_->setBoardToDefaults();
     human_->initPlayerPos();
     resetGenerationLogic();
     render();

@@ -9,9 +9,8 @@ void HumanPlayer::initPlayerPos() {
     posY = 1;
 }
 
-void HumanPlayer::move(size_t dx, size_t dy, Labyrinth& labyrinth) {
-    auto restrictionCell = labyrinth.getLabyrinth()[posY + dy][posX + dx].getState();
-    if ( restrictionCell != CellState::TREE && restrictionCell != CellState::BORDER) {
+void HumanPlayer::move(int dx, int dy, IMoveValidator& validator) {
+    if ( validator.canMove(posX, posY, dx, dy)) {
         posX += dx;
         posY += dy;
     }

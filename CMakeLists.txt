@@ -28,6 +28,7 @@ set(UTILS_SOURCES
         include/utils/PathFinding.hpp
         include/view/GameView.hpp
         include/model/Cell.hpp
+        include/utils/IMoveValidator.hpp
 )
 
 add_executable(Labyrinth_Jungle_2024

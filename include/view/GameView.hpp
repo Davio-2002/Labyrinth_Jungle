@@ -16,7 +16,7 @@ namespace {
 
 class GameView final : public sf::Drawable{
 public:
-    explicit GameView(size_t dim);
+    explicit GameView(size_t labSize);
 
     sf::RenderWindow &window() { return window_; }
 

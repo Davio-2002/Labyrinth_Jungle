@@ -4,10 +4,11 @@
 #include "GameView.hpp"
 
 enum class GameState {
-    PLAYING,
+    INGAME,
     RESTART
 };
 
+// TODO -> we are not sure about this yet
 struct Mode final {
     void treeoCalypseMode();
 
@@ -18,9 +19,11 @@ class GameController final {
 public:
     explicit GameController();
 
-    void handleEvents() const;
+    void handleKeyPress(sf::Keyboard::Key&);
 
-    void resetGameOnExit() const;
+    void handleEvents();
+
+    void resetGame() const;
 
     GameState setToFinished() const;
 
