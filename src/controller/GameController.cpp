@@ -49,11 +49,3 @@ GameState GameController::setToFinished() const {
     }
     return playState;
 }
-
-void Mode::treeoCalypseMode() {
-
-}
-
-void Mode::welcomeToTheJungleMode() {
-
-}

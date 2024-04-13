@@ -17,19 +17,22 @@ void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
 
     switch (cell.getState()) {
         case CellState::TREE:
-            cellRect.setFillColor(sf::Color(47, 117, 0));
+            cellRect.setFillColor(sf::Color(COLOR_EBONY));
             break;
         case CellState::BORDER:
-            cellRect.setFillColor(sf::Color(92, 73, 40));
+            cellRect.setFillColor(sf::Color(COLOR_DARK_CHARCOAL));
             break;
         case CellState::PLANTED:
-            cellRect.setFillColor(sf::Color::Magenta);
+            cellRect.setFillColor(sf::Color(COLOR_OLIVE_DRAB));
             break;
         case CellState::EXIT:
-            cellRect.setFillColor(sf::Color(136, 156, 54));
+            cellRect.setFillColor(sf::Color(COLOR_MOSS_GREEN));
+            break;
+        case CellState::TAIL:
+            cellRect.setFillColor(sf::Color::Red);
             break;
         default:
-            cellRect.setFillColor(sf::Color(136, 156, 54));
+            cellRect.setFillColor(sf::Color(COLOR_MOSS_GREEN));
     }
 
     target.draw(cellRect);
@@ -39,13 +42,13 @@ void GameView::renderPlayer(sf::RenderTarget &target, const HumanPlayer &human) 
     sf::RectangleShape playerShape(sf::Vector2f(CELLSIZE - THICKNESS, CELLSIZE - THICKNESS));
     playerShape.setOutlineColor(sf::Color::Black);
     playerShape.setOutlineThickness(THICKNESS);
-    playerShape.setFillColor(sf::Color(232, 188, 14));
+    playerShape.setFillColor(sf::Color(255, 156, 54));
     playerShape.setPosition(human.getX() * CELLSIZE, human.getY() * CELLSIZE);
     target.draw(playerShape);
 }
 
 void GameView::renderLabyrinth(sf::RenderTarget &target) const {
-    const auto &lab = labyrinth_->getLabyrinth();// Use a reference to avoid unnecessary copies
+    const auto &lab = labyrinth_->getLabyrinth();
     for (const auto &row: lab) {
         for (const auto &cell: row) {
             renderCell(target, cell);
@@ -54,7 +57,7 @@ void GameView::renderLabyrinth(sf::RenderTarget &target) const {
 }
 
 void GameView::init() {
-    resetGenerationLogic();
+    defaultGenerationLogicHandler();
     size_t matrixSize = labyrinth_->getMatrixSize();
     window_.create(sf::VideoMode((CELLSIZE) * (matrixSize),
                                  (CELLSIZE) * (matrixSize)),
@@ -68,14 +71,14 @@ void GameView::render() {
     window_.display();
 }
 
-void GameView::resetGenerationLogic() {
+void GameView::defaultGenerationLogicHandler() {
     labyrinth_->generateViaDFS();
     labyrinth_->setRandomExit();
 }
 
-void GameView::resetBoard()  {
+void GameView::resetBoard() {
     labyrinth_->setBoardToDefaults();
     human_->initPlayerPos();
-    resetGenerationLogic();
+    defaultGenerationLogicHandler();
     render();
 }

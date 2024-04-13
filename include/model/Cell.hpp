@@ -1,12 +1,11 @@
 #ifndef CELL_HPP
 #define CELL_HPP
 
-#include <deque>
-
 enum class CellState {
     PATH,
     BORDER,
     TREE,
+    TAIL,
     PLANTED,
     EXIT
 };
@@ -17,16 +16,23 @@ private:
     size_t countDown{};
     size_t x{};
     size_t y{};
+    size_t distance{};
     bool visited{false};
 
 public:
     Cell() = default;
 
-    explicit Cell(const size_t x_, const size_t y_) : state{CellState::TREE}, countDown{10}, x{x_}, y{y_} {
+    explicit Cell(const size_t x_, const size_t y_) : state{CellState::TREE}, countDown{static_cast<size_t>(10)}, x{x_}, y{y_} {
     }
 
-    void decreaseCount() {
-        --countDown;
+    void makePlant() {
+        if (state == CellState::PATH) {
+            state = CellState::PLANTED;
+        }
+    }
+
+    bool isPlanted() const {
+        return state == CellState::PLANTED;
     }
 
     //// Check if cell is already visited

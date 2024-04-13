@@ -8,18 +8,11 @@ enum class GameState {
     RESTART
 };
 
-// TODO -> we are not sure about this yet
-struct Mode final {
-    void treeoCalypseMode();
-
-    void welcomeToTheJungleMode();
-};
-
 class GameController final {
 public:
     explicit GameController();
 
-    void handleKeyPress(sf::Keyboard::Key&);
+    void handleKeyPress(sf::Keyboard::Key &);
 
     void handleEvents();
 
