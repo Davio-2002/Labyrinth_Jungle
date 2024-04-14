@@ -22,7 +22,7 @@ private:
 public:
     Cell() = default;
 
-    explicit Cell(const size_t x_, const size_t y_) : state{CellState::TREE}, countDown{static_cast<size_t>(10)}, x{x_}, y{y_} {
+    explicit Cell(const size_t x_, const size_t y_) : state{CellState::TREE}, x{x_}, y{y_} {
     }
 
     void makePlant() {
@@ -69,6 +69,14 @@ public:
 
     size_t getY() const {
         return y;
+    }
+
+    size_t getDistance() const {
+        return distance;
+    }
+
+    void setDistance(size_t distance_) {
+        Cell::distance = distance_;
     }
 };
 

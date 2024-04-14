@@ -29,7 +29,7 @@ void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
             cellRect.setFillColor(sf::Color(COLOR_MOSS_GREEN));
             break;
         case CellState::TAIL:
-            cellRect.setFillColor(sf::Color::Red);
+            cellRect.setFillColor(sf::Color::Magenta);
             break;
         default:
             cellRect.setFillColor(sf::Color(COLOR_MOSS_GREEN));
@@ -73,7 +73,7 @@ void GameView::render() {
 
 void GameView::defaultGenerationLogicHandler() {
     labyrinth_->generateViaDFS();
-    labyrinth_->setRandomExit();
+    labyrinth_->setRandomExits();
 }
 
 void GameView::resetBoard() {

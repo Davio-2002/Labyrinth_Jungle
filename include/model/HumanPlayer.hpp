@@ -26,6 +26,8 @@ private:
     void updatePosition(int dx, int dy, Labyrinth&);
 
     bool canMove(int dx, int dy, const Labyrinth &labyrinth) const;
+
+    void leaveTail(int dx, int dy, Labyrinth &labyrinth);
 };
 
 #endif

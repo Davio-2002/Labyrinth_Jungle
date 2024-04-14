@@ -14,10 +14,14 @@ bool HumanPlayer::canMove(int dx, int dy, const Labyrinth &labyrinth) const {
     return labyrinth.canMove(posX, posY, dx, dy);
 }
 
+void HumanPlayer::leaveTail(int dx, int dy, Labyrinth& labyrinth) {
+    labyrinth.setLabyrinthState(dx, dy, CellState::TAIL);
+}
+
 void HumanPlayer::updatePosition(int dx, int dy, Labyrinth& labyrinth) {
     posX += dx;
     posY += dy;
-    labyrinth.leaveTail(posX - dx, posY - dy);
+    leaveTail(posX - dx, posY - dy, labyrinth);
 }
 
 void HumanPlayer::updateLabyrinth(Labyrinth &labyrinth) {
