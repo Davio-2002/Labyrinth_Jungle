@@ -1,6 +1,6 @@
 #include "GameController.hpp"
 
-GameController::GameController() : view_{std::make_shared<GameView>(20)}, playState{GameState::INGAME} {}
+GameController::GameController() : view_{std::make_shared<GameView>(5)}, playState{GameState::INGAME} {}
 
 void GameController::handleEvents() {
     sf::Event event;

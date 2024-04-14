@@ -1,6 +1,7 @@
 #include "Labyrinth.hpp"
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <random>
 #include <stack>
 #include <queue>
@@ -34,14 +35,8 @@ bool Labyrinth::isExitReached(HumanPlayer &human) {
 }
 
 Labyrinth::ExitCoordinates Labyrinth::getExits() {
-
-//    size_t rand_x2, rand_y2;
-//
-//    do {
-//
-//    } while (rand_x1 == rand_x2 && rand_y1 == rand_y2);
-//
-//    return { {rand_x1, rand_y1}, {rand_x2, rand_y2} };
+    return {{generateRandom(1, matrixSize - 2), matrixSize - 1},
+            {matrixSize - 1,                    generateRandom(1, matrixSize - 2)}};
 }
 
 void Labyrinth::setRandomExits() {
@@ -114,8 +109,12 @@ int Labyrinth::generateRandomCountdown(size_t src, size_t dest) {
 void Labyrinth::plantCellsRandomly() {
     PathCells emptyCells;
 
-//    auto exits = getExits();
-//    auto coordsForFirstPath = bfsForShortestPath(initialX, initialY, exits.first.first, exits.second.second);
+    auto exits = getExits();
+    auto coordsForFirstPath = bfsForShortestPath(initialX, initialY, exits.first.first, exits.second.second);
+
+    for( auto it = coordsForFirstPath.begin(); it != coordsForFirstPath.end(); ++it ) {
+        std::cout << it->first << " " << it->second << std::endl;
+    }
 
     for (size_t y = 0; y < matrixSize; ++y) {
         for (size_t x = 0; x < matrixSize; ++x) {
@@ -179,7 +178,41 @@ void Labyrinth::generateViaDFS() {
     }
 }
 
-Labyrinth::ShortestPathCoordinates
-Labyrinth::bfsForShortestPath(size_t startX, size_t startY, size_t destX, size_t destY) {
+Labyrinth::ShortestPathCoordinates Labyrinth::bfsForShortestPath(size_t startX, size_t startY, size_t destX, size_t destY) {
+    std::queue<std::pair<int, int>> cellQueue{};
+    std::vector<std::vector<char>> visitedNeighbors(matrixSize - 1, std::vector<char>(matrixSize - 1, 'n'));
 
+    visitedNeighbors[startY][startX] = 'v';
+    cellQueue.push({startY, startX});
+
+    std::vector<std::vector<int>> counterMatrix(matrixSize - 1, std::vector<int>(matrixSize - 1, std::numeric_limits<int>::max()));
+
+    while (!cellQueue.empty()) {
+        auto [curr_x, curr_y] = cellQueue.front();
+        cellQueue.pop();
+
+        if (curr_x == destX && curr_y == destY) {
+            return {{curr_x, curr_y}};
+        }
+
+        if (labyrinth[curr_y + 1][curr_x].getState() == CellState::PATH && visitedNeighbors[curr_y + 1][curr_x] == 'n') {
+            cellQueue.push({curr_x, curr_y + 1});
+            visitedNeighbors[curr_y + 1][curr_x] = 'v';
+        }
+
+        if (labyrinth[curr_y - 1][curr_x].getState() == CellState::PATH && visitedNeighbors[curr_y - 1][curr_x] == 'n') {
+            cellQueue.push({curr_x, curr_y - 1});
+            visitedNeighbors[curr_y - 1][curr_x] = 'v';
+        }
+
+        if (labyrinth[curr_y][curr_x + 1].getState() == CellState::PATH && visitedNeighbors[curr_y][curr_x + 1] == 'n') {
+            cellQueue.push({curr_x, curr_y});
+            visitedNeighbors[curr_y][curr_x + 1] = 'v';
+        }
+
+        if (labyrinth[curr_y][curr_x - 1].getState() == CellState::PATH && visitedNeighbors[curr_y][curr_x - 1] == 'n') {
+            cellQueue.push({curr_x - 1, curr_y});
+            visitedNeighbors[curr_y][curr_x - 1] = 'v';
+        }
+    }
 }
