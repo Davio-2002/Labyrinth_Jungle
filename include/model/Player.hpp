@@ -1,11 +1,13 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "IMoveValidator.hpp"
+#include "Labyrinth.hpp"
+
+class Labyrinth;
 
 class IPlayer {
 public:
-    virtual void move(int, int, IMoveValidator&) = 0;
+    virtual void move(int, int, Labyrinth &) = 0;
 
     virtual void cutTree() = 0;
 

@@ -10,11 +10,17 @@
 #include "Labyrinth.hpp"
 
 namespace {
-    constexpr float CELLSIZE = 10.0f;
+    constexpr float CELLSIZE = 15.0f;
     constexpr float THICKNESS = 1.0f;
+
+    const sf::Color COLOR_MOSS_GREEN(112, 128, 105); //path
+    const sf::Color COLOR_DARK_CHARCOAL(28, 28, 28); //border
+    const sf::Color COLOR_OLIVE_DRAB(107, 142, 35); //planting
+    const sf::Color COLOR_GOLD_FUSION(103, 95, 77); //player
+    const sf::Color COLOR_EBONY(33, 36, 33); //tree
 }
 
-class GameView final : public sf::Drawable{
+class GameView final : public sf::Drawable {
 public:
     explicit GameView(size_t labSize);
 
@@ -32,15 +38,15 @@ public:
 
     void render();
 
-    void resetGenerationLogic();
+    void defaultGenerationLogicHandler();
 
     void resetBoard();
 
-    const std::shared_ptr<HumanPlayer>& getHumanPtr() const {
+    const std::shared_ptr<HumanPlayer> &getHumanPtr() const {
         return human_;
     }
 
-    const std::shared_ptr<Labyrinth>& getLabyrinthPtr() const {
+    const std::shared_ptr<Labyrinth> &getLabyrinthPtr() const {
         return labyrinth_;
     }
 
