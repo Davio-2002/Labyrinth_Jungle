@@ -22,7 +22,7 @@ public:
     using UnvisitedNeighbours = std::vector<std::pair<size_t, size_t>>;
     using DirectionsPairs = std::vector<std::pair<int, int>>;
     using PathCells = std::vector<std::pair<size_t, size_t>>;
-    using ExitCoordinates = std::pair<std::pair<size_t, size_t>, std::pair<size_t, size_t>>;
+    using ExitCoordinates = std::pair<size_t, size_t>;
     using ShortestPathCoordinates = std::vector<std::pair<size_t, size_t>>;
 
     bool canMove(int posX, int posY, int dx, int dy) const;
@@ -66,7 +66,7 @@ private:
     DirectionsPairs directions;
     size_t rooms{};
     size_t matrixSize{};
-
+    ExitCoordinates exitCoord;
     UnvisitedNeighbours getUnvisitedNeighbours(const size_t &curr_x, const size_t &curr_y);
 
     ShortestPathCoordinates bfsForShortestPath(size_t startX, size_t startY, size_t destX, size_t destY);

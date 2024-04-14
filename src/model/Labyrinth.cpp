@@ -34,28 +34,16 @@ bool Labyrinth::isExitReached(HumanPlayer &human) {
     return labyrinth[human.getY()][human.getX()].getState() == CellState::EXIT;
 }
 
-Labyrinth::ExitCoordinates Labyrinth::getExits() {
-    return {{generateRandom(1, matrixSize - 2), matrixSize - 1},
-            {matrixSize - 1,                    generateRandom(1, matrixSize - 2)}};
-}
-
 void Labyrinth::setRandomExits() {
     size_t rand_x1 = generateRandom(1, matrixSize - 2);
     size_t rand_y1 = matrixSize - 1;
-
-    size_t rand_x2 = matrixSize - 1;
-    size_t rand_y2 = generateRandom(1, matrixSize - 2);
 
     if (labyrinth[rand_y1 - 1][rand_x1].getState() == CellState::TREE) {
         labyrinth[rand_y1 - 1][rand_x1].setState(CellState::PATH);
     }
 
-    if (labyrinth[rand_y2 - 1][rand_x2].getState() == CellState::TREE) {
-        labyrinth[rand_y2 - 1][rand_x2].setState(CellState::PATH);
-    }
-
     labyrinth[rand_y1][rand_x1].setState(CellState::EXIT);
-    labyrinth[rand_y2][rand_x2].setState(CellState::EXIT);
+    exitCoord={rand_x1,rand_y1};
 }
 
 
@@ -108,11 +96,9 @@ int Labyrinth::generateRandomCountdown(size_t src, size_t dest) {
 
 void Labyrinth::plantCellsRandomly() {
     PathCells emptyCells;
+    auto coordsForFirstPath = bfsForShortestPath(initialX, initialY, exitCoord.first, exitCoord.second);
 
-    auto exits = getExits();
-    auto coordsForFirstPath = bfsForShortestPath(initialX, initialY, exits.first.first, exits.second.second);
-
-    for( auto it = coordsForFirstPath.begin(); it != coordsForFirstPath.end(); ++it ) {
+    for (auto it = coordsForFirstPath.begin(); it != coordsForFirstPath.end(); ++it) {
         std::cout << it->first << " " << it->second << std::endl;
     }
 
@@ -180,39 +166,54 @@ void Labyrinth::generateViaDFS() {
 
 Labyrinth::ShortestPathCoordinates Labyrinth::bfsForShortestPath(size_t startX, size_t startY, size_t destX, size_t destY) {
     std::queue<std::pair<int, int>> cellQueue{};
-    std::vector<std::vector<char>> visitedNeighbors(matrixSize - 1, std::vector<char>(matrixSize - 1, 'n'));
+    std::vector<std::vector<char>> visitedNeighbors(matrixSize, std::vector<char>(matrixSize, 'n'));
 
-    visitedNeighbors[startY][startX] = 'v';
-    cellQueue.push({startY, startX});
+    std::vector<std::vector<std::pair<size_t, size_t>>> neighboursParents(matrixSize,std::vector<std::pair<size_t, size_t>>(matrixSize, std::make_pair(std::numeric_limits<size_t>::max(),std::numeric_limits<size_t>::max())));
 
-    std::vector<std::vector<int>> counterMatrix(matrixSize - 1, std::vector<int>(matrixSize - 1, std::numeric_limits<int>::max()));
+     visitedNeighbors[startY][startX] = 'v';
+    neighboursParents[startY][startX] = {startY, startX};
+    cellQueue.push({startX, startY});
 
     while (!cellQueue.empty()) {
         auto [curr_x, curr_y] = cellQueue.front();
         cellQueue.pop();
 
         if (curr_x == destX && curr_y == destY) {
-            return {{curr_x, curr_y}};
+            Labyrinth::ShortestPathCoordinates WinningPath;
+            std::pair<size_t, size_t> current = {curr_y, curr_x};
+            while (current.first != startY || current.second != startX) {
+                current = {neighboursParents[current.first][current.second]};
+                WinningPath.insert(WinningPath.begin(), current);
+            }
+            return WinningPath;
         }
 
-        if (labyrinth[curr_y + 1][curr_x].getState() == CellState::PATH && visitedNeighbors[curr_y + 1][curr_x] == 'n') {
+        if (((labyrinth[curr_y + 1][curr_x].getState() == CellState::PATH || labyrinth[curr_y + 1][curr_x].getState() == CellState::TAIL) &&
+            visitedNeighbors[curr_y + 1][curr_x] == 'n') || labyrinth[curr_y + 1][curr_x].getState() == CellState::EXIT ) {
             cellQueue.push({curr_x, curr_y + 1});
             visitedNeighbors[curr_y + 1][curr_x] = 'v';
+            neighboursParents[curr_y + 1][curr_x] = {curr_y, curr_x};
         }
 
-        if (labyrinth[curr_y - 1][curr_x].getState() == CellState::PATH && visitedNeighbors[curr_y - 1][curr_x] == 'n') {
+        if ((labyrinth[curr_y - 1][curr_x].getState() == CellState::PATH || labyrinth[curr_y - 1][curr_x].getState() == CellState::TAIL) &&
+            visitedNeighbors[curr_y - 1][curr_x] == 'n') {
             cellQueue.push({curr_x, curr_y - 1});
             visitedNeighbors[curr_y - 1][curr_x] = 'v';
+            neighboursParents[curr_y - 1][curr_x] = {curr_y, curr_x};
         }
 
-        if (labyrinth[curr_y][curr_x + 1].getState() == CellState::PATH && visitedNeighbors[curr_y][curr_x + 1] == 'n') {
-            cellQueue.push({curr_x, curr_y});
+        if ((labyrinth[curr_y][curr_x + 1].getState() == CellState::PATH || labyrinth[curr_y][curr_x + 1].getState() == CellState::TAIL)&&
+            visitedNeighbors[curr_y][curr_x + 1] == 'n') {
+            cellQueue.push({curr_x+1, curr_y});
             visitedNeighbors[curr_y][curr_x + 1] = 'v';
+            neighboursParents[curr_y][curr_x + 1] = {curr_y, curr_x};
         }
 
-        if (labyrinth[curr_y][curr_x - 1].getState() == CellState::PATH && visitedNeighbors[curr_y][curr_x - 1] == 'n') {
+        if ((labyrinth[curr_y][curr_x - 1].getState() == CellState::PATH || labyrinth[curr_y][curr_x - 1].getState() == CellState::EXIT) &&
+            visitedNeighbors[curr_y][curr_x - 1] == 'n') {
             cellQueue.push({curr_x - 1, curr_y});
             visitedNeighbors[curr_y][curr_x - 1] = 'v';
+            neighboursParents[curr_y][curr_x - 1] = {curr_y, curr_x};
         }
     }
 }
