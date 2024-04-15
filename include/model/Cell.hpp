@@ -5,6 +5,7 @@ enum class CellState {
     PATH,
     BORDER,
     TREE,
+    CUT_TREE,
     TAIL,
     PLANTED,
     EXIT
@@ -26,8 +27,14 @@ public:
     }
 
     void makePlant() {
-        if (state == CellState::PATH) {
+        if (state == CellState::PATH || state == CellState::TAIL) {
             state = CellState::PLANTED;
+        }
+    }
+
+    void makeTree() {
+        if (state == CellState::PATH || state == CellState::TAIL) {
+            state = CellState::TREE;
         }
     }
 
@@ -79,6 +86,5 @@ public:
         Cell::distance = distance_;
     }
 };
-
 
 #endif

@@ -2,11 +2,7 @@
 #define GAMECONTROLLER_HPP
 
 #include "GameView.hpp"
-
-enum class GameState {
-    INGAME,
-    RESTART
-};
+#include "GameFlowControl.hpp"
 
 class GameController final {
 public:
@@ -16,12 +12,15 @@ public:
 
     void handleEvents();
 
-    void resetGame() const;
+    void resetGame();
+
+    void setMode();
 
     GameState setToFinished() const;
 
 private:
     mutable GameState playState;
+    mutable GameMode gameMode;
     std::shared_ptr<GameView> view_{};
 };
 
