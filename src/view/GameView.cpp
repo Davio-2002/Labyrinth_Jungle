@@ -19,6 +19,9 @@ void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
         case CellState::TREE:
             cellRect.setFillColor(sf::Color(COLOR_EBONY));
             break;
+        case CellState::CUT_TREE:
+            cellRect.setFillColor(sf::Color(COLOR_EBONY));
+            break;
         case CellState::BORDER:
             cellRect.setFillColor(sf::Color(COLOR_DARK_CHARCOAL));
             break;
@@ -29,7 +32,7 @@ void GameView::renderCell(sf::RenderTarget &target, const Cell &cell) const {
             cellRect.setFillColor(sf::Color(COLOR_MOSS_GREEN));
             break;
         case CellState::TAIL:
-            cellRect.setFillColor(sf::Color::Red);
+            cellRect.setFillColor(sf::Color::Blue);
             break;
         default:
             cellRect.setFillColor(sf::Color(COLOR_MOSS_GREEN));
@@ -73,7 +76,8 @@ void GameView::render() {
 
 void GameView::defaultGenerationLogicHandler() {
     labyrinth_->generateViaDFS();
-    labyrinth_->setRandomExit();
+    labyrinth_->setRandomExits();
+    labyrinth_->setShortestPath();
 }
 
 void GameView::resetBoard() {

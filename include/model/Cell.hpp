@@ -5,6 +5,7 @@ enum class CellState {
     PATH,
     BORDER,
     TREE,
+    CUT_TREE,
     TAIL,
     PLANTED,
     EXIT
@@ -22,12 +23,18 @@ private:
 public:
     Cell() = default;
 
-    explicit Cell(const size_t x_, const size_t y_) : state{CellState::TREE}, countDown{static_cast<size_t>(10)}, x{x_}, y{y_} {
+    explicit Cell(const size_t x_, const size_t y_) : state{CellState::TREE}, x{x_}, y{y_} {
     }
 
     void makePlant() {
-        if (state == CellState::PATH) {
+        if (state == CellState::PATH || state == CellState::TAIL) {
             state = CellState::PLANTED;
+        }
+    }
+
+    void makeTree() {
+        if (state == CellState::PATH || state == CellState::TAIL) {
+            state = CellState::TREE;
         }
     }
 
@@ -70,7 +77,14 @@ public:
     size_t getY() const {
         return y;
     }
-};
 
+    size_t getDistance() const {
+        return distance;
+    }
+
+    void setDistance(size_t distance_) {
+        Cell::distance = distance_;
+    }
+};
 
 #endif

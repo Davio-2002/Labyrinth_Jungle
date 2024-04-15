@@ -10,7 +10,7 @@
 #include "Labyrinth.hpp"
 
 namespace {
-    constexpr float CELLSIZE = 15.0f;
+    constexpr float CELLSIZE = 20.0f;
     constexpr float THICKNESS = 1.0f;
 
     const sf::Color COLOR_MOSS_GREEN(112, 128, 105); //path

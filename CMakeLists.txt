@@ -25,9 +25,9 @@ set(UTILS_SOURCES
         include/model/HumanPlayer.hpp
         include/model/Labyrinth.hpp
         include/model/Player.hpp
-        include/utils/PathFinding.hpp
         include/view/GameView.hpp
         include/model/Cell.hpp
+        include/utils/GameFlowControl.hpp
 )
 
 add_executable(Labyrinth_Jungle_2024

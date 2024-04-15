@@ -1,0 +1,14 @@
+#ifndef LABYRINTH_JUNGLE_2024_GAMEFLOWCONTROL_HPP
+#define LABYRINTH_JUNGLE_2024_GAMEFLOWCONTROL_HPP
+
+enum class GameState {
+    INGAME,
+    RESTART
+};
+
+enum class GameMode {
+    TREEOCALYPSE,
+    WELCOME_TO_THE_JUNGLE
+};
+
+#endif

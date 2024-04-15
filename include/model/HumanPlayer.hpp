@@ -9,9 +9,9 @@ public:
 
     void initPlayerPos();
 
-    void move(int dx, int dy, Labyrinth &) override;
+    void move(int dx, int dy, Labyrinth &, GameMode &) override;
 
-    void cutTree() override;
+    bool canCutTree(Labyrinth&, int dx, int dy, GameMode& mode) override;
 
     float getX() const { return posX; }
 
@@ -21,11 +21,12 @@ private:
     int posX{};
     int posY{};
 
-    void updateLabyrinth(Labyrinth &labyrinth);
+    void updatePosition(int dx, int dy, Labyrinth &);
 
-    void updatePosition(int dx, int dy, Labyrinth&);
+    bool canMove(int dx, int dy, Labyrinth labyrinth, GameMode& mode);
 
-    bool canMove(int dx, int dy, const Labyrinth &labyrinth) const;
+    void leaveTail(int dx, int dy, Labyrinth &labyrinth);
+
 };
 
 #endif
